@@ -142,5 +142,60 @@ backToTopButton.addEventListener('click', () => {
     });
 });
 
+// Hero Carousel - Load images dynamically from images folder
+function initializeHeroCarousel() {
+    const carouselInner = document.querySelector('#heroCarousel .carousel-inner');
+    if (!carouselInner) return;
+
+    // List of images that actually exist in the images folder
+    // Excluding logo.jpg as it's not suitable for hero background
+    const images = [
+        'images/470237224_974992234664027_1895157211966722201_n.jpg',
+        'images/471156046_980064727490111_8864490251297250516_n.jpg',
+        'images/498305621_1088717889958127_256711520849693608_n.jpg',
+        'images/499947879_1094546839375232_494360342554113513_n.jpg',
+        'images/images (1).jpg',
+        'images/unnamed.jpg',
+        'images/unnamed (2).jpg',
+        'images/unnamed (3).jpg',
+        'images/cover_shadow_without_title.jpg'
+    ];
+
+    // Clear existing content
+    carouselInner.innerHTML = '';
+
+    // Create carousel items with error handling
+    images.forEach((imagePath, index) => {
+        const carouselItem = document.createElement('div');
+        carouselItem.className = 'carousel-item';
+        if (index === 0) {
+            carouselItem.classList.add('active');
+        }
+
+        const img = document.createElement('img');
+        img.src = imagePath;
+        img.className = 'd-block w-100';
+        img.alt = `University of Chittagong - Campus Image ${index + 1}`;
+        img.loading = index < 3 ? 'eager' : 'lazy'; // Load first 3 images eagerly for better UX
+        
+        // Handle image loading errors
+        img.onerror = function() {
+            console.warn(`Failed to load image: ${imagePath}`);
+            // Remove the carousel item if image fails to load
+            if (carouselItem.parentNode) {
+                carouselItem.parentNode.removeChild(carouselItem);
+            }
+        };
+
+        carouselItem.appendChild(img);
+        carouselInner.appendChild(carouselItem);
+    });
+}
+
+// Initialize carousel when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeHeroCarousel();
+});
+
 console.log('University of Chittagong Website - JavaScript Loaded');
 
